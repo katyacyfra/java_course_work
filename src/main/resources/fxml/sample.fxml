@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane alignment="center" hgap="10" prefHeight="298.0" prefWidth="406.0" vgap="10" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <children>
+        <Label fx:id="lbl0" minHeight="16" minWidth="69" text="Server architecture:" />
+        <ComboBox fx:id="architectCombo" layoutX="15.0" layoutY="33.0" prefHeight="26.0" prefWidth="215.0" promptText="Server architecture..." GridPane.columnIndex="2" />
+        <Label fx:id="lbl1" layoutX="126.0" layoutY="92.0" minHeight="16" minWidth="69" text="X (number of queries):" GridPane.rowIndex="1" />
+        <TextField id="X" fx:id="numberOfQueries" layoutX="115.0" layoutY="28.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+        <Label fx:id="lbl01" layoutX="126.0" layoutY="92.0" minHeight="16" minWidth="69" text="Tested parameter:" GridPane.rowIndex="2" />
+        <ComboBox fx:id="paramCombo" layoutX="15.0" layoutY="33.0" prefHeight="26.0" prefWidth="214.0" promptText="Tested parameter..." GridPane.columnIndex="2" GridPane.rowIndex="2" />
+        <Label fx:id="steplbl" layoutX="126.0" layoutY="92.0" minHeight="16" minWidth="69" text="Step:" GridPane.rowIndex="3" />
+        <TextField id="step" fx:id="step" layoutX="115.0" layoutY="33.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+        <Label fx:id="fromlbl" layoutX="126.0" layoutY="92.0" minHeight="16" minWidth="69" text="From:" GridPane.rowIndex="4" />
+        <TextField id="from" fx:id="from" layoutX="115.0" layoutY="33.0" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+        <Label fx:id="tolbl" layoutX="126.0" layoutY="92.0" minHeight="16" minWidth="69" text="To:" GridPane.rowIndex="5" />
+        <TextField id="to" fx:id="to" layoutX="126.0" layoutY="33.0" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+        <Label fx:id="secondlbl" layoutX="126.0" layoutY="92.0" minHeight="16" minWidth="69" text="M (clients in time):" GridPane.rowIndex="6" />
+        <TextField id="second" fx:id="second" layoutX="126.0" layoutY="33.0" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+        <Label fx:id="thirdlbl" layoutX="126.0" layoutY="92.0" minHeight="16" minWidth="69" text="Delta (query delta):" GridPane.rowIndex="7" />
+        <TextField id="third" fx:id="third" layoutX="126.0" layoutY="33.0" GridPane.columnIndex="2" GridPane.rowIndex="7" />
+        <Label fx:id="result" layoutX="126.0" layoutY="92.0" minHeight="16" minWidth="69" text="" GridPane.rowIndex="9" />
+        <Button onAction="#runProgram" prefHeight="26.0" prefWidth="95.0" text="Test" GridPane.columnIndex="2" GridPane.rowIndex="10" />
+    </children>
+    <columnConstraints>
+        <ColumnConstraints maxWidth="148.0" minWidth="148.0" prefWidth="148.0" />
+        <ColumnConstraints maxWidth="0.0" minWidth="0.0" prefWidth="0.0" />
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+        <RowConstraints />
+    </rowConstraints>
+</GridPane>

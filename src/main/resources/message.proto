@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+package sample;
+
+option java_package = "protobuf";
+option java_outer_classname = "ClientMessageProtos";
+
+message Sorting {
+    required int32 size = 1;
+    repeated int32 number = 2;
+}
