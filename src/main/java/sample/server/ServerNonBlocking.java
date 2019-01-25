@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-
+import java.util.concurrent.TimeUnit;
 
 /*
 Клиент устанавливает постоянное соединение.
@@ -32,23 +31,23 @@ import java.util.concurrent.Executors;
  */
 
 public class ServerNonBlocking {
-    private static boolean listening = true;
     private static Selector selector;
     private static Selector sendSelector;
     private static ExecutorService es = Executors.newFixedThreadPool(5);
+    private static ServerSocketChannel serverSocket;
 
 
-    public static void main(String[] arg) throws IOException {
+    public static void main(String[] arg) {
+        System.out.println("Start");
+
+        Thread statThread = new Thread(() -> StatServer.run());
+        statThread.start();
+
         try {
-            Thread statThread = new Thread(() -> StatServer.run());
-            statThread.start();
-
+            serverSocket = ServerSocketChannel.open();
             selector = Selector.open();
             sendSelector = Selector.open();
-
-            ServerSocketChannel serverSocket = ServerSocketChannel.open();
             InetSocketAddress addr = new InetSocketAddress("localhost", 8083);
-
             serverSocket.bind(addr);
             serverSocket.configureBlocking(false);
             int options = serverSocket.validOps();
@@ -56,11 +55,7 @@ public class ServerNonBlocking {
             //SelectionKey key = serverSocket.register(selector, options, null);
 
             Thread senderThread = new Thread(() -> {
-                try {
-                    processSender();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                processSender();
             });
             senderThread.start();
 
@@ -79,10 +74,36 @@ public class ServerNonBlocking {
                 }
 
             }
+        } catch (ClosedSelectorException e) {
+            System.out.println("NonBlocking Server closed");
+        } catch (IOException e) {
+            System.err.println("Could not listen on port " + 8083);
         } finally {
             es.shutdown();
+            try {
+                es.awaitTermination(60, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                es.shutdownNow();
+            }
+            try {
+                StatServer.quit();
+                statThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
+    }
+
+    public static void quit() {
+        try {
+            selector.close();
+            sendSelector.close();
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void processAccept(ServerSocketChannel serverSocketChannel) throws IOException {
@@ -90,7 +111,6 @@ public class ServerNonBlocking {
         client.configureBlocking(false);
         Attachment attach = new Attachment();
         client.register(selector, SelectionKey.OP_READ, attach);
-
 
     }
 
@@ -133,13 +153,22 @@ public class ServerNonBlocking {
         }
     }
 
-    private static void processSender() throws IOException {
+    private static void processSender() {
 
         while (true) {
             //https://stackoverflow.com/questions/1057224/java-thread-blocks-while-registering-channel-with-selector-while-select-is-cal
-            sendSelector.select(100);
-            Set<SelectionKey> keys = sendSelector.selectedKeys();
-            Iterator<SelectionKey> iterator = keys.iterator();
+            try {
+                sendSelector.select(100);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Iterator<SelectionKey> iterator = null;
+            try {
+                Set<SelectionKey> keys = sendSelector.selectedKeys();
+                iterator = keys.iterator();
+            } catch (ClosedSelectorException e) {
+                break;
+            }
             while (iterator.hasNext()) {
                 SelectionKey current = iterator.next();
                 Attachment message = (Attachment) current.attachment();
@@ -160,13 +189,15 @@ public class ServerNonBlocking {
                         serializedMessage.writeDelimitedTo(bos);
                         buff.put(bos.toByteArray());
                         buff.flip();
+                        socket.write(buff);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    socket.write(buff);
+
                     //socket.write(message.intBuf);
                     //socket.write(ByteBuffer.wrap(bytesToSend));
 
-                    if (buff.position() == buff.limit())
-                    {
+                    if (buff.position() == buff.limit()) {
                         message.sh.endServerTimer();
                         message.intBuf.rewind();
                         message.size = -1;
@@ -180,6 +211,7 @@ public class ServerNonBlocking {
             }
         }
     }
+
 
     static class Task implements Runnable {
         List<Integer> array;
@@ -213,10 +245,9 @@ public class ServerNonBlocking {
                 e.printStackTrace();
             }
 
-
         }
     }
 
 
-    }
+}
 

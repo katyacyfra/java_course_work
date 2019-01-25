@@ -42,7 +42,7 @@ public class PrintResults {
             for (int i = 0; i < xs.size(); ++i) {
                 printWriter.println("x = " + xs.get(i) + "  y = " + values.get(i));
             }
-        } catch ( IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

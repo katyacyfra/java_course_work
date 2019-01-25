@@ -4,607 +4,666 @@
 package sample;
 
 public final class ClientMessageProtos {
-  private ClientMessageProtos() {}
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
-  }
-  public interface SortingOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:protobuf.Sorting)
-      com.google.protobuf.MessageOrBuilder {
-
-    /**
-     * <code>required int32 size = 1;</code>
-     */
-    boolean hasSize();
-    /**
-     * <code>required int32 size = 1;</code>
-     */
-    int getSize();
-
-    /**
-     * <code>repeated int32 number = 2;</code>
-     */
-    java.util.List<java.lang.Integer> getNumberList();
-    /**
-     * <code>repeated int32 number = 2;</code>
-     */
-    int getNumberCount();
-    /**
-     * <code>repeated int32 number = 2;</code>
-     */
-    int getNumber(int index);
-  }
-  /**
-   * Protobuf type {@code protobuf.Sorting}
-   */
-  public static final class Sorting extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:protobuf.Sorting)
-      SortingOrBuilder {
-    // Use Sorting.newBuilder() to construct.
-    private Sorting(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private Sorting(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final Sorting defaultInstance;
-    public static Sorting getDefaultInstance() {
-      return defaultInstance;
+    private ClientMessageProtos() {
     }
 
-    public Sorting getDefaultInstanceForType() {
-      return defaultInstance;
+    public static void registerAllExtensions(
+            com.google.protobuf.ExtensionRegistry registry) {
     }
 
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private Sorting(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              size_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                number_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              number_.add(input.readInt32());
-              break;
-            }
-            case 18: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
-                number_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                number_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          number_ = java.util.Collections.unmodifiableList(number_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return sample.ClientMessageProtos.internal_static_sample_Sorting_descriptor;
+    public interface SortingOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:protobuf.Sorting)
+            com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <code>required int32 size = 1;</code>
+         */
+        boolean hasSize();
+
+        /**
+         * <code>required int32 size = 1;</code>
+         */
+        int getSize();
+
+        /**
+         * <code>repeated int32 number = 2;</code>
+         */
+        java.util.List<java.lang.Integer> getNumberList();
+
+        /**
+         * <code>repeated int32 number = 2;</code>
+         */
+        int getNumberCount();
+
+        /**
+         * <code>repeated int32 number = 2;</code>
+         */
+        int getNumber(int index);
     }
 
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return sample.ClientMessageProtos.internal_static_sample_Sorting_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              sample.ClientMessageProtos.Sorting.class, sample.ClientMessageProtos.Sorting.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<Sorting> PARSER =
-        new com.google.protobuf.AbstractParser<Sorting>() {
-      public Sorting parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Sorting(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<Sorting> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    public static final int SIZE_FIELD_NUMBER = 1;
-    private int size_;
-    /**
-     * <code>required int32 size = 1;</code>
-     */
-    public boolean hasSize() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>required int32 size = 1;</code>
-     */
-    public int getSize() {
-      return size_;
-    }
-
-    public static final int NUMBER_FIELD_NUMBER = 2;
-    private java.util.List<java.lang.Integer> number_;
-    /**
-     * <code>repeated int32 number = 2;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getNumberList() {
-      return number_;
-    }
-    /**
-     * <code>repeated int32 number = 2;</code>
-     */
-    public int getNumberCount() {
-      return number_.size();
-    }
-    /**
-     * <code>repeated int32 number = 2;</code>
-     */
-    public int getNumber(int index) {
-      return number_.get(index);
-    }
-
-    private void initFields() {
-      size_ = 0;
-      number_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      if (!hasSize()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, size_);
-      }
-      for (int i = 0; i < number_.size(); i++) {
-        output.writeInt32(2, number_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, size_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < number_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(number_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getNumberList().size();
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static sample.ClientMessageProtos.Sorting parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sample.ClientMessageProtos.Sorting parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sample.ClientMessageProtos.Sorting parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static sample.ClientMessageProtos.Sorting parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static sample.ClientMessageProtos.Sorting parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static sample.ClientMessageProtos.Sorting parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static sample.ClientMessageProtos.Sorting parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static sample.ClientMessageProtos.Sorting parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static sample.ClientMessageProtos.Sorting parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static sample.ClientMessageProtos.Sorting parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(sample.ClientMessageProtos.Sorting prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
     /**
      * Protobuf type {@code protobuf.Sorting}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:protobuf.Sorting)
-        sample.ClientMessageProtos.SortingOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return sample.ClientMessageProtos.internal_static_sample_Sorting_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return sample.ClientMessageProtos.internal_static_sample_Sorting_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                sample.ClientMessageProtos.Sorting.class, sample.ClientMessageProtos.Sorting.Builder.class);
-      }
-
-      // Construct using protobuf.ClientMessageProtos.Sorting.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+    public static final class Sorting extends
+            com.google.protobuf.GeneratedMessage implements
+            // @@protoc_insertion_point(message_implements:protobuf.Sorting)
+            SortingOrBuilder {
+        // Use Sorting.newBuilder() to construct.
+        private Sorting(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+            super(builder);
+            this.unknownFields = builder.getUnknownFields();
         }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
 
-      public Builder clear() {
-        super.clear();
-        size_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        number_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return sample.ClientMessageProtos.internal_static_sample_Sorting_descriptor;
-      }
-
-      public sample.ClientMessageProtos.Sorting getDefaultInstanceForType() {
-        return sample.ClientMessageProtos.Sorting.getDefaultInstance();
-      }
-
-      public sample.ClientMessageProtos.Sorting build() {
-        sample.ClientMessageProtos.Sorting result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
+        private Sorting(boolean noInit) {
+            this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
-        return result;
-      }
 
-      public sample.ClientMessageProtos.Sorting buildPartial() {
-        sample.ClientMessageProtos.Sorting result = new sample.ClientMessageProtos.Sorting(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
+        private static final Sorting defaultInstance;
+
+        public static Sorting getDefaultInstance() {
+            return defaultInstance;
         }
-        result.size_ = size_;
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          number_ = java.util.Collections.unmodifiableList(number_);
-          bitField0_ = (bitField0_ & ~0x00000002);
+
+        public Sorting getDefaultInstanceForType() {
+            return defaultInstance;
         }
-        result.number_ = number_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
 
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof sample.ClientMessageProtos.Sorting) {
-          return mergeFrom((sample.ClientMessageProtos.Sorting)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
+        private final com.google.protobuf.UnknownFieldSet unknownFields;
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return this.unknownFields;
         }
-      }
 
-      public Builder mergeFrom(sample.ClientMessageProtos.Sorting other) {
-        if (other == sample.ClientMessageProtos.Sorting.getDefaultInstance()) return this;
-        if (other.hasSize()) {
-          setSize(other.getSize());
+        private Sorting(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            initFields();
+            int mutable_bitField0_ = 0;
+            com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+                    com.google.protobuf.UnknownFieldSet.newBuilder();
+            try {
+                boolean done = false;
+                while (!done) {
+                    int tag = input.readTag();
+                    switch (tag) {
+                        case 0:
+                            done = true;
+                            break;
+                        default: {
+                            if (!parseUnknownField(input, unknownFields,
+                                    extensionRegistry, tag)) {
+                                done = true;
+                            }
+                            break;
+                        }
+                        case 8: {
+                            bitField0_ |= 0x00000001;
+                            size_ = input.readInt32();
+                            break;
+                        }
+                        case 16: {
+                            if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                                number_ = new java.util.ArrayList<java.lang.Integer>();
+                                mutable_bitField0_ |= 0x00000002;
+                            }
+                            number_.add(input.readInt32());
+                            break;
+                        }
+                        case 18: {
+                            int length = input.readRawVarint32();
+                            int limit = input.pushLimit(length);
+                            if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
+                                number_ = new java.util.ArrayList<java.lang.Integer>();
+                                mutable_bitField0_ |= 0x00000002;
+                            }
+                            while (input.getBytesUntilLimit() > 0) {
+                                number_.add(input.readInt32());
+                            }
+                            input.popLimit(limit);
+                            break;
+                        }
+                    }
+                }
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                throw e.setUnfinishedMessage(this);
+            } catch (java.io.IOException e) {
+                throw new com.google.protobuf.InvalidProtocolBufferException(
+                        e.getMessage()).setUnfinishedMessage(this);
+            } finally {
+                if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                    number_ = java.util.Collections.unmodifiableList(number_);
+                }
+                this.unknownFields = unknownFields.build();
+                makeExtensionsImmutable();
+            }
         }
-        if (!other.number_.isEmpty()) {
-          if (number_.isEmpty()) {
-            number_ = other.number_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            ensureNumberIsMutable();
-            number_.addAll(other.number_);
-          }
-          onChanged();
+
+        public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+            return sample.ClientMessageProtos.internal_static_sample_Sorting_descriptor;
         }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
 
-      public final boolean isInitialized() {
-        if (!hasSize()) {
-          
-          return false;
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+            return sample.ClientMessageProtos.internal_static_sample_Sorting_fieldAccessorTable
+                    .ensureFieldAccessorsInitialized(
+                            sample.ClientMessageProtos.Sorting.class, sample.ClientMessageProtos.Sorting.Builder.class);
         }
-        return true;
-      }
 
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        sample.ClientMessageProtos.Sorting parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (sample.ClientMessageProtos.Sorting) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
+        public static com.google.protobuf.Parser<Sorting> PARSER =
+                new com.google.protobuf.AbstractParser<Sorting>() {
+                    public Sorting parsePartialFrom(
+                            com.google.protobuf.CodedInputStream input,
+                            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                            throws com.google.protobuf.InvalidProtocolBufferException {
+                        return new Sorting(input, extensionRegistry);
+                    }
+                };
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<Sorting> getParserForType() {
+            return PARSER;
         }
-        return this;
-      }
-      private int bitField0_;
 
-      private int size_ ;
-      /**
-       * <code>required int32 size = 1;</code>
-       */
-      public boolean hasSize() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>required int32 size = 1;</code>
-       */
-      public int getSize() {
-        return size_;
-      }
-      /**
-       * <code>required int32 size = 1;</code>
-       */
-      public Builder setSize(int value) {
-        bitField0_ |= 0x00000001;
-        size_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int32 size = 1;</code>
-       */
-      public Builder clearSize() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        size_ = 0;
-        onChanged();
-        return this;
-      }
+        private int bitField0_;
+        public static final int SIZE_FIELD_NUMBER = 1;
+        private int size_;
 
-      private java.util.List<java.lang.Integer> number_ = java.util.Collections.emptyList();
-      private void ensureNumberIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          number_ = new java.util.ArrayList<java.lang.Integer>(number_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-      /**
-       * <code>repeated int32 number = 2;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getNumberList() {
-        return java.util.Collections.unmodifiableList(number_);
-      }
-      /**
-       * <code>repeated int32 number = 2;</code>
-       */
-      public int getNumberCount() {
-        return number_.size();
-      }
-      /**
-       * <code>repeated int32 number = 2;</code>
-       */
-      public int getNumber(int index) {
-        return number_.get(index);
-      }
-      /**
-       * <code>repeated int32 number = 2;</code>
-       */
-      public Builder setNumber(
-          int index, int value) {
-        ensureNumberIsMutable();
-        number_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 number = 2;</code>
-       */
-      public Builder addNumber(int value) {
-        ensureNumberIsMutable();
-        number_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 number = 2;</code>
-       */
-      public Builder addAllNumber(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureNumberIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, number_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 number = 2;</code>
-       */
-      public Builder clearNumber() {
-        number_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-        return this;
-      }
+        /**
+         * <code>required int32 size = 1;</code>
+         */
+        public boolean hasSize() {
+            return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
 
-      // @@protoc_insertion_point(builder_scope:protobuf.Sorting)
+        /**
+         * <code>required int32 size = 1;</code>
+         */
+        public int getSize() {
+            return size_;
+        }
+
+        public static final int NUMBER_FIELD_NUMBER = 2;
+        private java.util.List<java.lang.Integer> number_;
+
+        /**
+         * <code>repeated int32 number = 2;</code>
+         */
+        public java.util.List<java.lang.Integer>
+        getNumberList() {
+            return number_;
+        }
+
+        /**
+         * <code>repeated int32 number = 2;</code>
+         */
+        public int getNumberCount() {
+            return number_.size();
+        }
+
+        /**
+         * <code>repeated int32 number = 2;</code>
+         */
+        public int getNumber(int index) {
+            return number_.get(index);
+        }
+
+        private void initFields() {
+            size_ = 0;
+            number_ = java.util.Collections.emptyList();
+        }
+
+        private byte memoizedIsInitialized = -1;
+
+        public final boolean isInitialized() {
+            byte isInitialized = memoizedIsInitialized;
+            if (isInitialized == 1) return true;
+            if (isInitialized == 0) return false;
+
+            if (!hasSize()) {
+                memoizedIsInitialized = 0;
+                return false;
+            }
+            memoizedIsInitialized = 1;
+            return true;
+        }
+
+        public void writeTo(com.google.protobuf.CodedOutputStream output)
+                throws java.io.IOException {
+            getSerializedSize();
+            if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                output.writeInt32(1, size_);
+            }
+            for (int i = 0; i < number_.size(); i++) {
+                output.writeInt32(2, number_.get(i));
+            }
+            getUnknownFields().writeTo(output);
+        }
+
+        private int memoizedSerializedSize = -1;
+
+        public int getSerializedSize() {
+            int size = memoizedSerializedSize;
+            if (size != -1) return size;
+
+            size = 0;
+            if (((bitField0_ & 0x00000001) == 0x00000001)) {
+                size += com.google.protobuf.CodedOutputStream
+                        .computeInt32Size(1, size_);
+            }
+            {
+                int dataSize = 0;
+                for (int i = 0; i < number_.size(); i++) {
+                    dataSize += com.google.protobuf.CodedOutputStream
+                            .computeInt32SizeNoTag(number_.get(i));
+                }
+                size += dataSize;
+                size += 1 * getNumberList().size();
+            }
+            size += getUnknownFields().getSerializedSize();
+            memoizedSerializedSize = size;
+            return size;
+        }
+
+        private static final long serialVersionUID = 0L;
+
+        @java.lang.Override
+        protected java.lang.Object writeReplace()
+                throws java.io.ObjectStreamException {
+            return super.writeReplace();
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return PARSER.parseFrom(input);
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return PARSER.parseFrom(input, extensionRegistry);
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return PARSER.parseDelimitedFrom(input);
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return PARSER.parseDelimitedFrom(input, extensionRegistry);
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return PARSER.parseFrom(input);
+        }
+
+        public static sample.ClientMessageProtos.Sorting parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return PARSER.parseFrom(input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return Builder.create();
+        }
+
+        public Builder newBuilderForType() {
+            return newBuilder();
+        }
+
+        public static Builder newBuilder(sample.ClientMessageProtos.Sorting prototype) {
+            return newBuilder().mergeFrom(prototype);
+        }
+
+        public Builder toBuilder() {
+            return newBuilder(this);
+        }
+
+        @java.lang.Override
+        protected Builder newBuilderForType(
+                com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+            Builder builder = new Builder(parent);
+            return builder;
+        }
+
+        /**
+         * Protobuf type {@code protobuf.Sorting}
+         */
+        public static final class Builder extends
+                com.google.protobuf.GeneratedMessage.Builder<Builder> implements
+                // @@protoc_insertion_point(builder_implements:protobuf.Sorting)
+                sample.ClientMessageProtos.SortingOrBuilder {
+            public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+                return sample.ClientMessageProtos.internal_static_sample_Sorting_descriptor;
+            }
+
+            protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+                return sample.ClientMessageProtos.internal_static_sample_Sorting_fieldAccessorTable
+                        .ensureFieldAccessorsInitialized(
+                                sample.ClientMessageProtos.Sorting.class, sample.ClientMessageProtos.Sorting.Builder.class);
+            }
+
+            // Construct using protobuf.ClientMessageProtos.Sorting.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
+            private void maybeForceBuilderInitialization() {
+                if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+                }
+            }
+
+            private static Builder create() {
+                return new Builder();
+            }
+
+            public Builder clear() {
+                super.clear();
+                size_ = 0;
+                bitField0_ = (bitField0_ & ~0x00000001);
+                number_ = java.util.Collections.emptyList();
+                bitField0_ = (bitField0_ & ~0x00000002);
+                return this;
+            }
+
+            public Builder clone() {
+                return create().mergeFrom(buildPartial());
+            }
+
+            public com.google.protobuf.Descriptors.Descriptor
+            getDescriptorForType() {
+                return sample.ClientMessageProtos.internal_static_sample_Sorting_descriptor;
+            }
+
+            public sample.ClientMessageProtos.Sorting getDefaultInstanceForType() {
+                return sample.ClientMessageProtos.Sorting.getDefaultInstance();
+            }
+
+            public sample.ClientMessageProtos.Sorting build() {
+                sample.ClientMessageProtos.Sorting result = buildPartial();
+                if (!result.isInitialized()) {
+                    throw newUninitializedMessageException(result);
+                }
+                return result;
+            }
+
+            public sample.ClientMessageProtos.Sorting buildPartial() {
+                sample.ClientMessageProtos.Sorting result = new sample.ClientMessageProtos.Sorting(this);
+                int from_bitField0_ = bitField0_;
+                int to_bitField0_ = 0;
+                if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+                    to_bitField0_ |= 0x00000001;
+                }
+                result.size_ = size_;
+                if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                    number_ = java.util.Collections.unmodifiableList(number_);
+                    bitField0_ = (bitField0_ & ~0x00000002);
+                }
+                result.number_ = number_;
+                result.bitField0_ = to_bitField0_;
+                onBuilt();
+                return result;
+            }
+
+            public Builder mergeFrom(com.google.protobuf.Message other) {
+                if (other instanceof sample.ClientMessageProtos.Sorting) {
+                    return mergeFrom((sample.ClientMessageProtos.Sorting) other);
+                } else {
+                    super.mergeFrom(other);
+                    return this;
+                }
+            }
+
+            public Builder mergeFrom(sample.ClientMessageProtos.Sorting other) {
+                if (other == sample.ClientMessageProtos.Sorting.getDefaultInstance()) return this;
+                if (other.hasSize()) {
+                    setSize(other.getSize());
+                }
+                if (!other.number_.isEmpty()) {
+                    if (number_.isEmpty()) {
+                        number_ = other.number_;
+                        bitField0_ = (bitField0_ & ~0x00000002);
+                    } else {
+                        ensureNumberIsMutable();
+                        number_.addAll(other.number_);
+                    }
+                    onChanged();
+                }
+                this.mergeUnknownFields(other.getUnknownFields());
+                return this;
+            }
+
+            public final boolean isInitialized() {
+                if (!hasSize()) {
+
+                    return false;
+                }
+                return true;
+            }
+
+            public Builder mergeFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws java.io.IOException {
+                sample.ClientMessageProtos.Sorting parsedMessage = null;
+                try {
+                    parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+                } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+                    parsedMessage = (sample.ClientMessageProtos.Sorting) e.getUnfinishedMessage();
+                    throw e;
+                } finally {
+                    if (parsedMessage != null) {
+                        mergeFrom(parsedMessage);
+                    }
+                }
+                return this;
+            }
+
+            private int bitField0_;
+
+            private int size_;
+
+            /**
+             * <code>required int32 size = 1;</code>
+             */
+            public boolean hasSize() {
+                return ((bitField0_ & 0x00000001) == 0x00000001);
+            }
+
+            /**
+             * <code>required int32 size = 1;</code>
+             */
+            public int getSize() {
+                return size_;
+            }
+
+            /**
+             * <code>required int32 size = 1;</code>
+             */
+            public Builder setSize(int value) {
+                bitField0_ |= 0x00000001;
+                size_ = value;
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>required int32 size = 1;</code>
+             */
+            public Builder clearSize() {
+                bitField0_ = (bitField0_ & ~0x00000001);
+                size_ = 0;
+                onChanged();
+                return this;
+            }
+
+            private java.util.List<java.lang.Integer> number_ = java.util.Collections.emptyList();
+
+            private void ensureNumberIsMutable() {
+                if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+                    number_ = new java.util.ArrayList<java.lang.Integer>(number_);
+                    bitField0_ |= 0x00000002;
+                }
+            }
+
+            /**
+             * <code>repeated int32 number = 2;</code>
+             */
+            public java.util.List<java.lang.Integer>
+            getNumberList() {
+                return java.util.Collections.unmodifiableList(number_);
+            }
+
+            /**
+             * <code>repeated int32 number = 2;</code>
+             */
+            public int getNumberCount() {
+                return number_.size();
+            }
+
+            /**
+             * <code>repeated int32 number = 2;</code>
+             */
+            public int getNumber(int index) {
+                return number_.get(index);
+            }
+
+            /**
+             * <code>repeated int32 number = 2;</code>
+             */
+            public Builder setNumber(
+                    int index, int value) {
+                ensureNumberIsMutable();
+                number_.set(index, value);
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>repeated int32 number = 2;</code>
+             */
+            public Builder addNumber(int value) {
+                ensureNumberIsMutable();
+                number_.add(value);
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>repeated int32 number = 2;</code>
+             */
+            public Builder addAllNumber(
+                    java.lang.Iterable<? extends java.lang.Integer> values) {
+                ensureNumberIsMutable();
+                com.google.protobuf.AbstractMessageLite.Builder.addAll(
+                        values, number_);
+                onChanged();
+                return this;
+            }
+
+            /**
+             * <code>repeated int32 number = 2;</code>
+             */
+            public Builder clearNumber() {
+                number_ = java.util.Collections.emptyList();
+                bitField0_ = (bitField0_ & ~0x00000002);
+                onChanged();
+                return this;
+            }
+
+            // @@protoc_insertion_point(builder_scope:protobuf.Sorting)
+        }
+
+        static {
+            defaultInstance = new Sorting(true);
+            defaultInstance.initFields();
+        }
+
+        // @@protoc_insertion_point(class_scope:protobuf.Sorting)
     }
+
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_sample_Sorting_descriptor;
+    private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internal_static_sample_Sorting_fieldAccessorTable;
+
+    public static com.google.protobuf.Descriptors.FileDescriptor
+    getDescriptor() {
+        return descriptor;
+    }
+
+    private static com.google.protobuf.Descriptors.FileDescriptor
+            descriptor;
 
     static {
-      defaultInstance = new Sorting(true);
-      defaultInstance.initFields();
+        java.lang.String[] descriptorData = {
+                "\n\rmessage.proto\022\006sample\"\'\n\007Sorting\022\014\n\004si" +
+                        "ze\030\001 \002(\005\022\016\n\006number\030\002 \003(\005B\035\n\006sampleB\023Clie" +
+                        "ntMessageProtos"
+        };
+        com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
+                new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+                    public com.google.protobuf.ExtensionRegistry assignDescriptors(
+                            com.google.protobuf.Descriptors.FileDescriptor root) {
+                        descriptor = root;
+                        return null;
+                    }
+                };
+        com.google.protobuf.Descriptors.FileDescriptor
+                .internalBuildGeneratedFileFrom(descriptorData,
+                        new com.google.protobuf.Descriptors.FileDescriptor[]{
+                        }, assigner);
+        internal_static_sample_Sorting_descriptor =
+                getDescriptor().getMessageTypes().get(0);
+        internal_static_sample_Sorting_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_sample_Sorting_descriptor,
+                new java.lang.String[]{"Size", "Number",});
     }
 
-    // @@protoc_insertion_point(class_scope:protobuf.Sorting)
-  }
-
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_sample_Sorting_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_sample_Sorting_fieldAccessorTable;
-
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
-    return descriptor;
-  }
-  private static com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
-  static {
-    java.lang.String[] descriptorData = {
-      "\n\rmessage.proto\022\006sample\"\'\n\007Sorting\022\014\n\004si" +
-      "ze\030\001 \002(\005\022\016\n\006number\030\002 \003(\005B\035\n\006sampleB\023Clie" +
-      "ntMessageProtos"
-    };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
-    com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
-    internal_static_sample_Sorting_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_sample_Sorting_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_sample_Sorting_descriptor,
-        new java.lang.String[] { "Size", "Number", });
-  }
-
-  // @@protoc_insertion_point(outer_class_scope)
+    // @@protoc_insertion_point(outer_class_scope)
 }

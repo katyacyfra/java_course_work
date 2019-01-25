@@ -42,7 +42,7 @@ public class StatRunner {
 
     private void runConf(int port, int X, int N, int M, int D) throws InterruptedException {
         ExecutorService es = Executors.newFixedThreadPool(M);
-        for(int i=0; i < M; i++) {
+        for (int i = 0; i < M; i++) {
             es.execute(new Client(port, X, D, N));
         }
         es.shutdown();
@@ -53,7 +53,7 @@ public class StatRunner {
         try (Socket query = new Socket("localhost", 8085);
              DataInputStream is = new DataInputStream(query.getInputStream());
              DataOutputStream os = new DataOutputStream(query.getOutputStream())) {
-            os.writeInt(X*M);
+            os.writeInt(X * M);
             os.flush();
 
             StatAggregator.clientServerTimes.add(is.readLong());

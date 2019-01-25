@@ -1,11 +1,11 @@
-One thread per client:  metrics: 1 (sorting time) X: 10 M: 10 D: 100
+Thread pool:  metrics: 1 (sorting time) X: 10 M: 10 D: 50
 x = 1000  y = 3
-x = 2000  y = 2
-x = 3000  y = 5
-x = 4000  y = 15
-x = 5000  y = 27
-x = 6000  y = 39
-x = 7000  y = 65
-x = 8000  y = 77
-x = 9000  y = 100
-x = 10000  y = 127
+x = 2000  y = 1
+x = 3000  y = 6
+x = 4000  y = 13
+x = 5000  y = 26
+x = 6000  y = 54
+x = 7000  y = 72
+x = 8000  y = 76
+x = 9000  y = 97
+x = 10000  y = 120

@@ -1,5 +1,4 @@
 package sample;
-//https://stackoverflow.com/questions/13032257/combo-box-javafx-with-fxml
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -9,6 +8,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import sample.server.ServerNonBlocking;
+import sample.server.ServerThreadPerClient;
+import sample.server.ServerThreadPool;
 import sample.statistics.PrintResults;
 import sample.statistics.StatAggregator;
 import sample.statistics.StatRunner;
@@ -16,11 +18,12 @@ import sample.statistics.StatRunner;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.TimeUnit;
 
 public class Controller implements Initializable {
 
 
-    @FXML // fx:id="fruitCombo"
+    @FXML
     private ComboBox<String> architectCombo;
 
     @FXML
@@ -68,8 +71,25 @@ public class Controller implements Initializable {
         int thirdParam = Integer.parseInt(third.getText());
 
         StatRunner runner = null;
-        String secondName ="";
+        String secondName = "";
         String thirdName = "";
+
+        String[] arg = {};
+
+        Thread serverThread = null;
+        switch (architectureType) {
+            case 0:
+                serverThread = new Thread(() -> ServerThreadPerClient.main(arg));
+                break;
+            case 1:
+                serverThread = new Thread(() -> ServerThreadPool.main(arg));
+                break;
+            case 2:
+                serverThread = new Thread(() -> ServerNonBlocking.main(arg));
+                break;
+        }
+        serverThread.start();
+        TimeUnit.MILLISECONDS.sleep(200);
         switch (paramType) {
             case 0:
                 runner = new StatRunner(8081 + architectureType,
@@ -92,23 +112,35 @@ public class Controller implements Initializable {
                 secondName = "N";
                 thirdName = "M";
                 break;
-
         }
 
-        System.out.println("RESULT" + StatAggregator.getClientTimes());
+        switch (architectureType) {
+            case 0:
+                ServerThreadPerClient.quit();
+                break;
+            case 1:
+                ServerThreadPool.quit();
+                break;
+            case 2:
+                ServerNonBlocking.quit();
+                break;
+        }
+        serverThread.join();
+
+        System.out.println("Client" + StatAggregator.getClientTimes());
         System.out.println("Server" + StatAggregator.clientServerTimes);
         System.out.println("Sorting" + StatAggregator.clientSortingTimes);
 
         PrintResults p = new PrintResults(archName + ": " + " metrics: 1 (sorting time)" +
-                " X: " + X + " " + secondName +": " + secParam + " " + thirdName + ": " + thirdParam,
+                " X: " + X + " " + secondName + ": " + secParam + " " + thirdName + ": " + thirdParam,
                 paramName, runner.scale(stepVal, fromVal, toVal), StatAggregator.clientSortingTimes, paramName, 1);
 
         p = new PrintResults(archName + ": " + " metrics: 2 (time on server)" +
-                " X: " + X + " " + secondName +": " + secParam + " " + thirdName + ": " + thirdParam,
+                " X: " + X + " " + secondName + ": " + secParam + " " + thirdName + ": " + thirdParam,
                 paramName, runner.scale(stepVal, fromVal, toVal), StatAggregator.clientServerTimes, paramName, 2);
 
         p = new PrintResults(archName + ": " + " metrics: 3 (time on client)" +
-                " X: " + X + " " + secondName +": " + secParam + " " + thirdName + ": " + thirdParam,
+                " X: " + X + " " + secondName + ": " + secParam + " " + thirdName + ": " + thirdParam,
                 paramName, runner.scale(stepVal, fromVal, toVal), StatAggregator.getClientTimes(), paramName, 3);
 
         StatAggregator.reset();
@@ -129,7 +161,7 @@ public class Controller implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if (newValue != null) {
-                    switch(newValue) {
+                    switch (newValue) {
                         case "N (number of elements)":
                             secondlbl.setText("M (clients in time):");
                             thirdlbl.setText("Delta (query delta):");

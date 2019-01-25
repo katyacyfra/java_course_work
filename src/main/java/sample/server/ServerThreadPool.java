@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,27 +22,63 @@ import java.util.concurrent.TimeUnit;
 После обработки ответ клиенту отправляется через соответствующий SingleThreadExecutor.
  */
 public class ServerThreadPool {
-    private static boolean listening = true;
     private static ExecutorService es = Executors.newFixedThreadPool(5);
+    private static ServerSocket serverSocket;
 
     public static void main(String[] arg) {
         Thread statThread = new Thread(() -> StatServer.run());
         statThread.start();
-        try (ServerSocket serverSocket = new ServerSocket(8082)) {
-            while (listening) {
-                Socket socket = serverSocket.accept();
+        Socket socket = null;
+        try {
+            serverSocket = new ServerSocket(8082);
+            while (true) {
+                socket = serverSocket.accept();
                 Thread t = new Thread(new ServerThreadPerClient.Task(socket));
                 t.start();
             }
+        } catch (SocketException e) {
             //close StatServer
+            System.out.println("ThreadPool Server closed");
         } catch (IOException e) {
             System.err.println("Could not listen on port " + 8082);
-            System.exit(-1);
-        }
-        finally {
+        } finally {
             es.shutdown();
+            try {
+                es.awaitTermination(60, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                es.shutdownNow();
+            }
+            try {
+                if (!serverSocket.isClosed()) {
+                    serverSocket.close();
+                }
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
+
+                if (!serverSocket.isClosed()) {
+                    serverSocket.close();
+                }
+
+                StatServer.quit();
+                statThread.join();
+
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void quit() {
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 
     static class Task implements Runnable {
         Socket clientSocket;
@@ -54,7 +91,7 @@ public class ServerThreadPool {
         public void run() {
             ExecutorService answer = Executors.newSingleThreadExecutor();
             StatHolder sh = new StatHolder();
-            int queryCounter  = 0;
+            int queryCounter = 0;
             try (DataInputStream is = new DataInputStream(clientSocket.getInputStream());
                  DataOutputStream os = new DataOutputStream(clientSocket.getOutputStream())) {
                 sh.startServerTimer();
@@ -71,7 +108,7 @@ public class ServerThreadPool {
                         sh.endSortingTimer();
 
                         //send
-                        answer.submit(()-> {
+                        answer.submit(() -> {
                             ClientMessageProtos.Sorting.Builder serializer = ClientMessageProtos.Sorting.newBuilder();
                             serializer.setSize(array.getSize());
                             serializer.addAllNumber(result);
@@ -93,8 +130,7 @@ public class ServerThreadPool {
                 answer.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
             } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
-            }
-            finally {
+            } finally {
                 try {
                     StatAggregator.addServerTimePerClient(sh.getServerTime(), queryCounter);
                     StatAggregator.addSortingTimePerClient(sh.getSortingTime(), queryCounter);

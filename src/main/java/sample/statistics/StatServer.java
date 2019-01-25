@@ -9,28 +9,49 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 
 public class StatServer {
-    private static boolean listening = true;
+    private static ServerSocket serverSocket;
 
     public static void run() {
-        try (ServerSocket serverSocket = new ServerSocket(8085)) {
-            while (listening) {
-                Socket socket = serverSocket.accept();
+        Socket socket = null;
+        try {
+            serverSocket = new ServerSocket(8085);
+            while (true) {
+                socket = serverSocket.accept();
                 Thread t = new Thread(new StatServer.Task(socket));
                 t.start();
             }
+        } catch (SocketException e) {
+            System.out.println("Stat server closed");
         } catch (IOException e) {
-            //port taken
-            //System.err.println("Could not listen on port " + 8085);
-            //System.exit(-1);
+            System.out.println("Could not listen on port " + 8085);
+        } finally {
+            try {
+                if (!serverSocket.isClosed()) {
+                    serverSocket.close();
+                }
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
+
     public static void quit() {
-        System.out.println("Quit!");
-        listening = false;
+        ;
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     static class Task implements Runnable {
@@ -43,7 +64,7 @@ public class StatServer {
         @Override
         public void run() {
             try (DataOutputStream os = new DataOutputStream(clientSocket.getOutputStream());
-            DataInputStream is = new DataInputStream(clientSocket.getInputStream())) {
+                 DataInputStream is = new DataInputStream(clientSocket.getInputStream())) {
 
                 int clientAndQuery = is.readInt();
 

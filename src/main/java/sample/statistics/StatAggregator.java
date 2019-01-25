@@ -24,7 +24,7 @@ public class StatAggregator {
     }
 
     public static void addSortingTimePerClient(long time, int queries) {
-        sortingTimesPerVal.add(time/(long) queries);
+        sortingTimesPerVal.add(time / (long) queries);
     }
 
     public static List<Long> getClientTimes() {
@@ -48,8 +48,8 @@ public class StatAggregator {
         for (long v : sortingTimesPerVal) {
             sumSort += v;
         }
-        serverTimes = sumServer/del;
-        sortingTimes = sumSort/del;
+        serverTimes = sumServer / del;
+        sortingTimes = sumSort / del;
         sortingTimesPerVal.clear();
         serverTimesPerVal.clear();
     }
@@ -60,7 +60,7 @@ public class StatAggregator {
         for (long v : clientTimesPerVal) {
             sum += v;
         }
-        clientTimes.add(sum/clientTimesPerVal.size());
+        clientTimes.add(sum / clientTimesPerVal.size());
         clientTimesPerVal.clear();
     }
 
@@ -69,7 +69,6 @@ public class StatAggregator {
         clientSortingTimes.clear();
         clientServerTimes.clear();
     }
-
 
 
 }

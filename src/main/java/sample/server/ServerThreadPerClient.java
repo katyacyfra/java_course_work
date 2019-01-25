@@ -11,6 +11,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.List;
 
 /*
@@ -18,21 +19,44 @@ import java.util.List;
 Сервер создает отдельный поток на общение (прием запроса, выполнение запроса и отправку ответа) с конкретным клиентом.
  */
 public class ServerThreadPerClient {
-    private static boolean listening = true;
+    public static ServerSocket serverSocket;
 
     public static void main(String[] arg) {
         Thread statThread = new Thread(() -> StatServer.run());
         statThread.start();
-        try (ServerSocket serverSocket = new ServerSocket(8081)) {
-            while (listening) {
-                Socket socket = serverSocket.accept();
+        Socket socket = null;
+        try {
+            serverSocket = new ServerSocket(8081);
+            while (true) {
+                socket = serverSocket.accept();
                 Thread t = new Thread(new Task(socket));
                 t.start();
             }
-            //close StatServer
+        } catch (SocketException e) {
+            System.out.println("Thread per Client Server closed");
         } catch (IOException e) {
             System.err.println("Could not listen on port " + 8081);
-            System.exit(-1);
+        } finally {
+            try {
+                if (!serverSocket.isClosed()) {
+                    serverSocket.close();
+                }
+                if (socket != null && !socket.isClosed()) {
+                    socket.close();
+                }
+                StatServer.quit();
+                statThread.join();
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void quit() {
+        try {
+            serverSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -46,7 +70,7 @@ public class ServerThreadPerClient {
         @Override
         public void run() {
             StatHolder sh = new StatHolder();
-            int queryCounter  = 0;
+            int queryCounter = 0;
             try (DataInputStream is = new DataInputStream(clientSocket.getInputStream());
                  DataOutputStream os = new DataOutputStream(clientSocket.getOutputStream())) {
                 //int receivedSize = in.readInt32();
@@ -75,8 +99,7 @@ public class ServerThreadPerClient {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-            finally {
+            } finally {
                 try {
                     StatAggregator.addServerTimePerClient(sh.getServerTime(), queryCounter);
                     StatAggregator.addSortingTimePerClient(sh.getSortingTime(), queryCounter);
