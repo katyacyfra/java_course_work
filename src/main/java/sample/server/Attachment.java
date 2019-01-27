@@ -9,8 +9,10 @@ import java.util.List;
 
 class Attachment {
     int size = -1;
+    int sizeToWrite = -1;
     ByteBuffer intBuf = ByteBuffer.allocate(4);
-    ByteBuffer arrayBuf;
+    ByteBuffer readBuf;
+    ByteBuffer writeBuf;
     StatHolder sh = new StatHolder();
 
     List<Integer> result = new ArrayList<>();

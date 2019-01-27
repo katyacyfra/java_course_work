@@ -33,66 +33,32 @@ import java.util.concurrent.TimeUnit;
 public class ServerNonBlocking {
     private static Selector selector;
     private static Selector sendSelector;
-    private static ExecutorService es = Executors.newFixedThreadPool(5);
+    private static ExecutorService es = Executors.newFixedThreadPool(10);
     private static ServerSocketChannel serverSocket;
 
 
     public static void main(String[] arg) {
-        System.out.println("Start");
-
-        Thread statThread = new Thread(() -> StatServer.run());
-        statThread.start();
-
         try {
-            serverSocket = ServerSocketChannel.open();
             selector = Selector.open();
             sendSelector = Selector.open();
-            InetSocketAddress addr = new InetSocketAddress("localhost", 8083);
-            serverSocket.bind(addr);
-            serverSocket.configureBlocking(false);
-            int options = serverSocket.validOps();
-            serverSocket.register(selector, SelectionKey.OP_ACCEPT);
-            //SelectionKey key = serverSocket.register(selector, options, null);
-
-            Thread senderThread = new Thread(() -> {
-                processSender();
-            });
-            senderThread.start();
-
-            while (true) {
-                selector.select();
-                Set<SelectionKey> keys = selector.selectedKeys();
-                Iterator<SelectionKey> iterator = keys.iterator();
-                while (iterator.hasNext()) {
-                    SelectionKey current = iterator.next();
-                    if (current.isAcceptable()) {
-                        processAccept(serverSocket);
-                    } else if (current.isReadable()) {
-                        processRead(current);
-                    }
-                    iterator.remove();
-                }
-
-            }
-        } catch (ClosedSelectorException e) {
-            System.out.println("NonBlocking Server closed");
         } catch (IOException e) {
-            System.err.println("Could not listen on port " + 8083);
-        } finally {
-            es.shutdown();
-            try {
-                es.awaitTermination(60, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                es.shutdownNow();
-            }
-            try {
-                StatServer.quit();
-                statThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            e.printStackTrace();
         }
+
+
+        //serverThread
+        Thread serverThread = new Thread(new ServerAcceptTask());
+        serverThread.start();
+
+        System.out.println("Start reader");
+        //reader Thread
+        Thread readerThread = new Thread(new ReadTask());
+        readerThread.start();
+
+        //sender thread
+        System.out.println("Start sender");
+        Thread senderThread = new Thread(new SendTask());
+        senderThread.start();
 
     }
 
@@ -106,130 +72,182 @@ public class ServerNonBlocking {
         }
     }
 
-    private static void processAccept(ServerSocketChannel serverSocketChannel) throws IOException {
-        SocketChannel client = serverSocketChannel.accept();
-        client.configureBlocking(false);
-        Attachment attach = new Attachment();
-        client.register(selector, SelectionKey.OP_READ, attach);
+    private static class ReadTask implements Runnable {
+        private static void processRead(SelectionKey key) {
+            SocketChannel client = (SocketChannel) key.channel();
+            Attachment message = (Attachment) key.attachment();
 
-    }
-
-    private static void processRead(SelectionKey key) {
-        SocketChannel client = (SocketChannel) key.channel();
-        Attachment message = (Attachment) key.attachment();
-
-        try {
-            //reading size
-            if (message.size == -1) {
-                int bytesToRead = client.read(message.intBuf);
-                if (bytesToRead <= 0) {
-                    key.cancel();
-                    //return;
-                } else {
-                    //start working
-                    message.sh.startServerTimer();
-                }
-
-                //allocate size
-                if (message.intBuf.position() == 4) {
-                    message.intBuf.flip();
-                    message.size = message.intBuf.getInt();
-                    message.arrayBuf = ByteBuffer.allocate(message.size);
-                }
-            }
-            //reading message
-            if (message.size > 0) {
-                client.read(message.arrayBuf);
-                if (message.arrayBuf.position() == message.size) {
-                    message.size = -1;
-                    message.arrayBuf.flip();
-                    //sort
-                    es.submit(new Task(message, key));
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            key.cancel();
-        }
-    }
-
-    private static void processSender() {
-
-        while (true) {
-            //https://stackoverflow.com/questions/1057224/java-thread-blocks-while-registering-channel-with-selector-while-select-is-cal
             try {
-                sendSelector.select(100);
+                //reading size
+                if (message.size == -1) {
+                    int bytesToRead = client.read(message.intBuf);
+                    if (bytesToRead <= 0) {
+                        key.cancel();
+                        //return;
+                    } else {
+                        //start working
+                        message.sh.startServerTimer();
+                    }
+
+                    //allocate size
+                    if (message.intBuf.position() == 4) {
+                        message.intBuf.flip();
+                        message.size = message.intBuf.getInt();
+                        message.readBuf = ByteBuffer.allocate(message.size);
+                        message.intBuf.clear();
+                    }
+                }
+                //reading message
+                if (message.size > 0) {
+                    client.read(message.readBuf);
+                    if (message.readBuf.position() == message.readBuf.capacity()) {
+                        message.readBuf.flip();
+                        //sort
+                        es.submit(new Task(key));
+
+                    }
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                key.cancel();
+            }
+        }
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    selector.select(30);
+                    Set<SelectionKey> keys = selector.selectedKeys();
+                    Iterator<SelectionKey> iterator = keys.iterator();
+                    while (iterator.hasNext()) {
+                        SelectionKey current = iterator.next();
+                        if (current.isReadable()) {
+                            processRead(current);
+                        }
+                        iterator.remove();
+                    }
+
+                }
+            } catch (ClosedSelectorException e) {
+                System.out.println("Close selector");
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Iterator<SelectionKey> iterator = null;
-            try {
-                Set<SelectionKey> keys = sendSelector.selectedKeys();
-                iterator = keys.iterator();
-            } catch (ClosedSelectorException e) {
-                break;
-            }
-            while (iterator.hasNext()) {
-                SelectionKey current = iterator.next();
-                Attachment message = (Attachment) current.attachment();
-                SocketChannel socket = (SocketChannel) current.channel();
+        }
+    }
 
-
-                if (message != null) {
-                    ClientMessageProtos.Sorting.Builder serializer = ClientMessageProtos.Sorting.newBuilder();
-                    List<Integer> result = message.result;
-                    serializer.setSize(result.size());
-                    serializer.addAllNumber(result);
-                    ClientMessageProtos.Sorting serializedMessage = serializer.build();
-                    ByteBuffer buff = ByteBuffer.allocate(4 + serializedMessage.getSerializedSize());
-
-                    //os.writeInt32NoTag(message.getSerializedSize());
-
-                    try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
-                        serializedMessage.writeDelimitedTo(bos);
-                        buff.put(bos.toByteArray());
-                        buff.flip();
-                        socket.write(buff);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-
-                    //socket.write(message.intBuf);
-                    //socket.write(ByteBuffer.wrap(bytesToSend));
-
-                    if (buff.position() == buff.limit()) {
-                        message.sh.endServerTimer();
-                        message.intBuf.rewind();
-                        message.size = -1;
-                        current.cancel();
-                    }
-
-                    StatAggregator.addServerTimePerClient(message.sh.getServerTime(), 1);
-                    StatAggregator.addSortingTimePerClient(message.sh.getSortingTime(), 1);
+    private static class SendTask implements Runnable {
+        @Override
+        public void run() {
+            while (true) {
+                //https://stackoverflow.com/questions/1057224/java-thread-blocks-while-registering-channel-with-selector-while-select-is-cal
+                try {
+                    sendSelector.select(100);
+                } catch (ClosedSelectorException e) {
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                iterator.remove();
+                Iterator<SelectionKey> iterator;
+                try {
+                    Set<SelectionKey> keys = sendSelector.selectedKeys();
+                    iterator = keys.iterator();
+                } catch (ClosedSelectorException e) {
+                    break;
+                }
+                while (iterator.hasNext()) {
+                    SelectionKey current = iterator.next();
+                    Attachment message = (Attachment) current.attachment();
+                    SocketChannel socket = (SocketChannel) current.channel();
+
+                    if (message.sizeToWrite != -1) {
+                        try {
+                            while (message.writeBuf.hasRemaining()) {
+                               socket.write(message.writeBuf);
+                            }
+                            message.sh.endServerTimer();
+                            message.sizeToWrite = -1;
+                            StatAggregator.addServerTimePerClient(message.sh.getServerTime(), 1);
+                            StatAggregator.addSortingTimePerClient(message.sh.getSortingTime(), 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    iterator.remove();
+                }
             }
+
+        }
+    }
+
+    private static class ServerAcceptTask implements Runnable {
+        @Override
+        public void run() {
+
+            //statServer thread
+            Thread statThread = new Thread(() -> StatServer.run());
+            statThread.start();
+
+            try {
+                serverSocket = ServerSocketChannel.open();
+                InetSocketAddress addr = new InetSocketAddress("localhost", 8083);
+                serverSocket.bind(addr);
+
+                while (true) {
+                    SocketChannel client = serverSocket.accept();
+                    client.configureBlocking(false);
+                    Attachment attach = new Attachment();
+                    client.register(selector, SelectionKey.OP_READ, attach);
+                    client.register(sendSelector, SelectionKey.OP_WRITE, attach);
+                }
+            }
+                catch (ClosedChannelException e) {
+            } catch (IOException e) {
+                System.out.println("Could not listen on port " + 8083);
+            } finally {
+                System.out.println("Shutdown");
+                es.shutdown();
+                try {
+                    es.awaitTermination(60, TimeUnit.SECONDS);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    es.shutdownNow();
+
+                }
+                try {
+                    StatServer.quit();
+                    statThread.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
     }
 
 
-    static class Task implements Runnable {
+    private static class Task implements Runnable {
         List<Integer> array;
         Attachment attachment;
         SocketChannel channel;
 
-        Task(Attachment atch, SelectionKey key) throws InvalidProtocolBufferException {
-            attachment = atch;
+        Task(SelectionKey key) throws InvalidProtocolBufferException {
+            attachment = (Attachment) key.attachment();
             channel = (SocketChannel) key.channel();
 
-            ByteBuffer buf = atch.arrayBuf;
+            ByteBuffer buf = attachment.readBuf;
             byte[] byteArray = buf.array();
             ClientMessageProtos.Sorting message = ClientMessageProtos.Sorting.parseFrom(byteArray);
+            buf.clear();
+            attachment.size = -1;
             if (message == null) { //stop reading
                 key.cancel();
                 return;
             }
             array = message.getNumberList();
+
         }
 
         @Override
@@ -237,14 +255,20 @@ public class ServerNonBlocking {
             attachment.sh.startSortingTimer();
             List<Integer> result = Sorter.sort(array);
             attachment.sh.endSortingTimer();
-            attachment.result = result;
-            try {
-                channel.register(sendSelector, SelectionKey.OP_WRITE, attachment);
-                sendSelector.wakeup();
-            } catch (ClosedChannelException e) {
+            ClientMessageProtos.Sorting.Builder serializer = ClientMessageProtos.Sorting.newBuilder();
+            serializer.setSize(result.size());
+            serializer.addAllNumber(result);
+            ClientMessageProtos.Sorting serializedMessage = serializer.build();
+
+            try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+                serializedMessage.writeDelimitedTo(bos);
+                attachment.writeBuf = ByteBuffer.wrap(bos.toByteArray());
+                attachment.sizeToWrite = serializedMessage.getSerializedSize() + 4;
+
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            sendSelector.wakeup();
         }
     }
 

@@ -75,13 +75,13 @@ public class ServerThreadPerClient {
                  DataOutputStream os = new DataOutputStream(clientSocket.getOutputStream())) {
                 //int receivedSize = in.readInt32();
                 //System.out.println("received: " + receivedSize);
-                sh.startServerTimer();
+
                 while (true) {
+                    sh.startServerTimer();
                     ClientMessageProtos.Sorting array = ClientMessageProtos.Sorting.parseDelimitedFrom(is);
                     if (array == null) { //stop reading
                         break;
                     }
-                    queryCounter++;
                     sh.startSortingTimer();
                     List<Integer> result = Sorter.sort(array.getNumberList());
                     sh.endSortingTimer();
@@ -96,14 +96,13 @@ public class ServerThreadPerClient {
                     message.writeDelimitedTo(os);
                     os.flush();
                     sh.endServerTimer();
+                    StatAggregator.addServerTimePerClient(sh.getServerTime(), 1);
+                    StatAggregator.addSortingTimePerClient(sh.getSortingTime(), 1);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 try {
-                    StatAggregator.addServerTimePerClient(sh.getServerTime(), queryCounter);
-                    StatAggregator.addSortingTimePerClient(sh.getSortingTime(), queryCounter);
-
                     clientSocket.close();
                 } catch (IOException e) {
                     e.printStackTrace();

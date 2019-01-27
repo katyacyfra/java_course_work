@@ -68,7 +68,7 @@ public class StatServer {
 
                 int clientAndQuery = is.readInt();
 
-                StatAggregator.newServerCount(clientAndQuery);
+                StatAggregator.newServerCount();
                 long serverTime = StatAggregator.getServerTimes();
                 long sortingTime = StatAggregator.getSortingTimes();
 

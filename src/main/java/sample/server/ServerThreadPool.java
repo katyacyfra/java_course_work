@@ -91,17 +91,14 @@ public class ServerThreadPool {
         public void run() {
             ExecutorService answer = Executors.newSingleThreadExecutor();
             StatHolder sh = new StatHolder();
-            int queryCounter = 0;
             try (DataInputStream is = new DataInputStream(clientSocket.getInputStream());
                  DataOutputStream os = new DataOutputStream(clientSocket.getOutputStream())) {
-                sh.startServerTimer();
                 while (true) {
+                    sh.startServerTimer();
                     ClientMessageProtos.Sorting array = ClientMessageProtos.Sorting.parseDelimitedFrom(is);
                     if (array == null) { //stop reading
                         break;
                     }
-
-                    queryCounter++;
                     es.submit(() -> {
                         sh.startSortingTimer();
                         List<Integer> result = Sorter.sort(array.getNumberList());
@@ -116,6 +113,8 @@ public class ServerThreadPool {
                             try {
                                 message.writeDelimitedTo(os);
                                 os.flush();
+                                StatAggregator.addServerTimePerClient(sh.getServerTime(), 1);
+                                StatAggregator.addSortingTimePerClient(sh.getSortingTime(), 1);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -132,9 +131,6 @@ public class ServerThreadPool {
                 e.printStackTrace();
             } finally {
                 try {
-                    StatAggregator.addServerTimePerClient(sh.getServerTime(), queryCounter);
-                    StatAggregator.addSortingTimePerClient(sh.getSortingTime(), queryCounter);
-
                     clientSocket.close();
                 } catch (IOException e) {
                     e.printStackTrace();

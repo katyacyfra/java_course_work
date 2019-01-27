@@ -39,7 +39,7 @@ public class StatAggregator {
         return sortingTimes;
     }
 
-    public static void newServerCount(int del) {
+    public static void newServerCount() {
         long sumSort = 0;
         long sumServer = 0;
         for (long v : serverTimesPerVal) {
@@ -48,8 +48,8 @@ public class StatAggregator {
         for (long v : sortingTimesPerVal) {
             sumSort += v;
         }
-        serverTimes = sumServer / del;
-        sortingTimes = sumSort / del;
+        serverTimes = sumServer / serverTimesPerVal.size();
+        sortingTimes = sumSort / sortingTimesPerVal.size();
         sortingTimesPerVal.clear();
         serverTimesPerVal.clear();
     }
